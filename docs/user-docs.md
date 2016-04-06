@@ -39,11 +39,11 @@ an optimized engine that supports general computation graphs for data
 analysis. It also supports a rich set of higher-level tools including
 Spark SQL for SQL and DataFrames, MLlib for machine learning, GraphX
 for graph processing, and Spark Streaming for stream processing. For
-more information, see the [Apache Spark documentation][docs].
+more information, see the [Apache Spark documentation][1].
 
 DCOS Spark includes:
 
-- [Mesos Cluster Dispatcher][Mesos Cluster Mode]  
+- [Mesos Cluster Dispatcher][Mesos Cluster Mode]
 - [Spark History Server][Spark History Server]
 - DCOS Spark CLI
 
@@ -70,8 +70,8 @@ DCOS Spark includes:
 
 ### Related Services
 
-[HDFS][DCOS HDFS]  
-[Kafka][DCOS Kafka]  
+[HDFS][DCOS HDFS]
+[Kafka][DCOS Kafka]
 [Zeppelin][DCOS Zeppelin]
 
 ## Quick Start
@@ -90,12 +90,12 @@ DCOS Spark includes:
 3. View your job:
 
    Visit the Spark cluster dispatcher at
-   `http://<dcos-url>/service/spark/` to view the status of your job. 
+   `http://<dcos-url>/service/spark/` to view the status of your job.
    Also visit the Mesos UI at `http://<dcos-url>/mesos/` to see job
    logs.
 
 ## Install
- 
+
 To start a basic Spark cluster, run the following command on the DCOS
 CLI. This command installs the dispatcher, and, optionally, the
 history server. See [Custom Installation](#custom) to install the
@@ -107,7 +107,7 @@ Monitor the deployment at `http://<dcos-url>/marathon`. Once it is
 complete, visit Spark at `http://<dcos-url>/service/spark/`.
 
 ### Custom Installation <a name="custom"></a>
- 
+
 You can customize the default configuration properties by creating a
 JSON options file and passing it to `dcos package install --options`.
 For example, to install the history server, create a file called
@@ -136,7 +136,7 @@ $ dcos package describe spark --config
 ```
 
 #### HDFS
- 
+
 By default, DCOS Spark jobs are configured to read from DCOS HDFS. To
 submit Spark jobs that read from a different HDFS cluster, customize
 `hdfs.config-url` to be a URL that serves `hdfs-site.xml` and
@@ -154,7 +154,7 @@ You can access external (i.e. non-DCOS) Kerberos-secured HDFS clusters
 from Spark on Mesos.
 
 ##### Credentials
- 
+
 To authenticate to a Kerberos KDC on Spark, Mesos supports keytab
 files as well as ticket files (TGTs).
 
@@ -235,22 +235,31 @@ core-site.xml of Hadoop in this way:
 
 1. Base64 encode your `krb5.conf` file:
 
-```bash $ cat krb5.conf | base64 W2xpYmRlZmF1bHRzXQogICAgICA…. ```
+```bash
+$ cat krb5.conf | base64 W2xpYmRlZmF1bHRzXQogICAgICA....
+```
 
 This file tells Spark how to connect to your KDC.
 
 1. Add the following to your JSON configuration file to enable
 Kerberos in Spark:
 
-``` { "spark": { "kerberos": { "krb5conf": "W2xp..."
-     }
-     }  }
+```json
+{
+  "spark": {
+    "kerberos": {
+      "krb5conf": "W2xp..."
+    }
+  }
+}
 ```
 
 1. Install Spark with your custom configuration, here called
 `options.json`:
 
-```bash dcos package install --options=options.json spark ```
+```bash
+dcos package install --options=options.json spark
+```
 
 #### History Server
 
@@ -449,13 +458,13 @@ dispatcher at `http://<dcos-url>/service/spark/`
 
 
 ### Setting Spark properties
- 
+
 Spark job settings are controlled by configuring [Spark
 properties][Spark Properties].  You can set Spark properties during
 submission, or you can create a configuration file.
 
 #### Submission
- 
+
 All properties are submitted through the `--submit-args` option to
 `dcos spark run`. These are ultimately passed to the [`spark-submit`
 script][Spark Submitting Applications].
@@ -478,7 +487,7 @@ $ dcos spark run --submit-args="-Dspark.executor.memory=4g
 ```
 
 #### Configuration file
- 
+
 To set Spark properties with a configuration file, create a
 `spark-defaults.conf` file and set the environment variable
 `SPARK_CONF_DIR` to the containing directory. For more info, [see
@@ -486,7 +495,7 @@ here][Spark Overriding Configuration Directory].
 
 
 ## Uninstall
- 
+
 ``` bash
 $ dcos package uninstall --app-id=<app-id> spark
 ```
@@ -518,7 +527,7 @@ cleanly reload Spark.
 ## Troubleshooting
 
 ### Dispatcher
- 
+
 The Mesos cluster dispatcher is responsible for queuing, tracking, and
 supervising drivers. Potential problems may arise if the dispatcher
 does not receive the resources offers you expect from Mesos, or if
@@ -552,11 +561,12 @@ the `--verbose` flag.
 To debug authentication in a Spark job, enable Java security debug
 output:
 
-```bash $ dcos spark run
---submit-args="-Dsun.security.krb5.debug=true..." ```
+```bash
+$ dcos spark run --submit-args="-Dsun.security.krb5.debug=true..."
+```
 
 ## Limitations
- 
+
 - Spark jobs run in Docker containers. The first time you run a Spark
 job on a node, it might take longer than you expect because of the
 `docker pull`.
@@ -565,21 +575,14 @@ job on a node, it might take longer than you expect because of the
 recommend Zeppelin, which supports visualizations and dynamic
 dependency management.
 
-[Spark Documentation]: http://spark.apache.org/documentation.html
-[Spark History Server]:
-http://spark.apache.org/docs/latest/monitoring.html#viewing-after-the-
-fact [Spark Submitting Applications]:
-http://spark.apache.org/docs/latest/submitting-applications.html
-[Spark Properties]:
-http://spark.apache.org/docs/latest/configuration.html#spark-
-properties [Spark Overriding Configuration Directory]:
-http://spark.apache.org/docs/latest/configuration.html#overriding-
-configuration-directory [Spark Inheriting Hadoop Cluster
-Configuration]:
-http://spark.apache.org/docs/latest/configuration.html#inheriting-
-hadoop-cluster-configuration [Mesos Cluster Mode]:
-http://spark.apache.org/docs/latest/running-on-mesos.html#cluster-mode
-[DCOS HDFS]: https://docs.mesosphere.com/manage-service/hdfs/ [DCOS
-Kafka]: https://docs.mesosphere.com/manage-service/kafka/ [DCOS
-Zeppelin]: https://zeppelin.incubator.apache.org [Java Keytool]:
-http://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html
+[1]: http://spark.apache.org/documentation.html
+[Spark History Server]: http://spark.apache.org/docs/latest/monitoring.html#viewing-after-the-fact
+[Spark Submitting Applications]: http://spark.apache.org/docs/latest/submitting-applications.html
+[Spark Properties]: http://spark.apache.org/docs/latest/configuration.html#spark-properties
+[Spark Overriding Configuration Directory]: http://spark.apache.org/docs/latest/configuration.html#overriding-configuration-directory
+[Spark Inheriting Hadoop Cluster Configuration]: http://spark.apache.org/docs/latest/configuration.html#inheriting-hadoop-cluster-configuration
+[Mesos Cluster Mode]: http://spark.apache.org/docs/latest/running-on-mesos.html#cluster-mode
+[DCOS HDFS]: https://docs.mesosphere.com/manage-service/hdfs/
+[DCOS Kafka]: https://docs.mesosphere.com/manage-service/kafka/
+[DCOS Zeppelin]: https://zeppelin.incubator.apache.org
+[Java Keytool]: http://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html
