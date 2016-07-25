@@ -52,9 +52,9 @@ configure_cli() {
     # local S3_FILENAME="${S3_PREFIX}spark-universe-${BUILD_ID}.zip"
     # aws s3 cp ./build/spark-universe.zip "s3://${S3_BUCKET}/${S3_FILENAME}" --acl public-read
     # dcos package repo add --index=0 spark-test "http://${S3_BUCKET}.s3.amazonaws.com/${S3_FILENAME}"
-    dcos marathon app add ./build/spark-universe/docker/server/target/marathon.json
-    dcos package repo add --index=0 spark-test http://universe.marathon.mesos:8085/repo-1.7
-    dcos package repo add --index=0 spark-test0 http://universe.marathon.mesos:8085/repo
+    #dcos marathon app add ./build/spark-universe/docker/server/target/marathon.json
+    #dcos package repo add --index=0 spark-test http://universe.marathon.mesos:8085/repo-1.7
+    #dcos package repo add --index=0 spark-test0 http://universe.marathon.mesos:8085/repo
 
     # wait for universe server to come up
     sleep 45
@@ -83,8 +83,8 @@ run_tests() {
     popd
 }
 
-build_universe;
-start_cluster;
+#build_universe;
+#start_cluster;
 configure_cli;
-install_spark;
+#install_spark;
 run_tests;

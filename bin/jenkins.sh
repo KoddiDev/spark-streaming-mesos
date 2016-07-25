@@ -89,8 +89,8 @@ function spark_test {
     install_cli
 
     pushd spark-build
-    docker_login
-    make docker
+    #docker_login
+    #make docker
     CLUSTER_NAME=spark-package-${BUILD_NUMBER} \
                 TEST_RUNNER_DIR=$(pwd)/../mesos-spark-integration-tests/test-runner/ \
                 DCOS_CHANNEL=testing/master \

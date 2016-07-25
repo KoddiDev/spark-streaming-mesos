@@ -8,5 +8,5 @@ export AWS_SECRET_ACCESS_KEY=${DEV_AWS_SECRET_ACCESS_KEY}
 
 source spark-build/bin/jenkins.sh
 
-upload_distribution
+#upload_distribution
 spark_test
