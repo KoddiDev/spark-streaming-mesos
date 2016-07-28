@@ -61,7 +61,7 @@ configure_cli() {
 }
 
 install_spark() {
-    dcos --log-level=INFO package install spark --yes
+    dcos --log-level=INFO package install spark --options=/tmp/spark.json --yes
 
     while [[ $(dcos marathon app list --json | jq '.[] | select(.id=="/spark") | .tasksHealthy') -ne "1" ]]
     do
