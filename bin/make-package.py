@@ -27,6 +27,9 @@ def main():
     if os.getenv("VERSION") is not None:
         manifest["version"] = os.getenv("VERSION")
 
+    if os.getenv("SPARK_DIST_URI") is not None:
+        manifest["spark_uri"] = os.getenv("SPARK_DIST_URI")
+
     # write template vars
     template_filenames = ['package/package.json',
                           'package/command.json',
