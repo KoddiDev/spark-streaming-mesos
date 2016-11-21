@@ -55,9 +55,9 @@ configure_cli() {
     dcos config set core.ssl_verify false
     ${COMMONS_TOOLS_DIR}/dcos_login.py
     dcos config show
-    if [ -n "${STUB_UNIVERSE_URL}" ]; then
-        dcos package repo add --index=0 spark-test "${STUB_UNIVERSE_URL}"
-    fi
+    # if [ -n "${STUB_UNIVERSE_URL}" ]; then
+    #     dcos package repo add --index=0 spark-test "${STUB_UNIVERSE_URL}"
+    # fi
 }
 
 install_spark() {
@@ -113,7 +113,7 @@ fetch_commons_tools
 start_cluster
 # TODO: Migrate the following three commands to dcos-commons-tools/run-tests.py
 configure_cli
-install_spark
+# install_spark
 run_tests
 
 notify_github success "Tests Passed"

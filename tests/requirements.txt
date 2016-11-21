@@ -1,2 +1,4 @@
 boto
--e git+https://github.com/dcos/shakedown.git@master#egg=shakedown
+# -e git+https://github.com/dcos/shakedown.git@master#egg=shakedown
+# -e git+https://github.com/dcos/shakedown.git@master#egg=shakedown
+-e /home/mgummelt/code/shakedown
