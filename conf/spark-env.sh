@@ -8,10 +8,6 @@
 # CLI reads the "SPARK_HDFS_CONFIG_URL" marathon label in order to set
 # spark.mesos.uris
 
-mkdir -p "${HADOOP_CONF_DIR}"
-[ -f "${MESOS_SANDBOX}/hdfs-site.xml" ] && cp "${MESOS_SANDBOX}/hdfs-site.xml" "${HADOOP_CONF_DIR}"
-[ -f "${MESOS_SANDBOX}/core-site.xml" ] && cp "${MESOS_SANDBOX}/core-site.xml" "${HADOOP_CONF_DIR}"
-
 cd $MESOS_SANDBOX
 
 MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so
