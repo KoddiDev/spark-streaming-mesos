@@ -27,7 +27,7 @@ def test_jar():
         job_str = _render_template(f.read(), template_vars)
         job_spec = json.loads(job_str)
 
-    shakedown.run_job(job_spec)
+    shakedown.run_job(job_spec, 600)
 
 
 def test_python():
