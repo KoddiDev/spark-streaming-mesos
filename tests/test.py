@@ -45,6 +45,14 @@ def teardown_module(module):
         _run_janitor('hdfs')
 
 
+@pytest.mark.nothing
+def test_nothing():
+    print("done")
+    assert(True)
+    return
+
+
+@pytest.mark.fast
 def test_jar():
     master_url = ("https" if _is_strict() else "http") + "://leader.mesos:5050"
     spark_job_runner_args = '{} dcos \\"*\\" spark:only 2 --auth-token={}'.format(
@@ -57,6 +65,7 @@ def test_jar():
                ["--class", 'com.typesafe.spark.test.mesos.framework.runners.SparkJobRunner'])
 
 
+@pytest.mark.smoke
 def test_teragen():
     if _hdfs_enabled():
         jar_url = "https://downloads.mesosphere.io/spark/examples/spark-terasort-1.0-jar-with-dependencies_2.11.jar"
