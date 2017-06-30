@@ -3,7 +3,7 @@ the specific git commands, and they shouldn't be followed mindlessly.
 They are meant to give an idea of how each process is carried out.
 You should first understand what the hell you're doing.
 
-![Branch Model](./branches.png)
+![Branch Model](./branches.png =300x)
 
 # Setup repo
 ```
