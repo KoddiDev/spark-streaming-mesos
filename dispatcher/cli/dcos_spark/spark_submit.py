@@ -167,8 +167,16 @@ def submit_job(dispatcher, submit_args, docker_image, verbose=False):
     :param verbose: If true, prints verbose information to stdout.
     :type verbose: boolean
     """
+    app = spark_app()
+    dcos_space = app["id"]
+    role = app["env"]["SPARK_DISPATCHER_MESOS_ROLE"]
+
     args = ["--conf",
-            "spark.mesos.executor.docker.image={}".format(docker_image)] + \
+            "spark.mesos.executor.docker.image={}".format(docker_image),
+            "--conf",
+            "spark.mesos.task.labels=DCOS_SPACE:{}".format(dcos_space),
+            "--conf",
+            "spark.mesos.role={}".format(role)] + \
         submit_args.split()
 
     hdfs_url = _get_spark_hdfs_url()
