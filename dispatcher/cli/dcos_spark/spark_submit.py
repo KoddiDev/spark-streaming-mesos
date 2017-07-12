@@ -174,7 +174,7 @@ def submit_job(dispatcher, submit_args, docker_image, verbose=False):
     args = ["--conf",
             "spark.mesos.executor.docker.image={}".format(docker_image),
             "--conf",
-            "spark.mesos.task.labels=DCOS_SPACE:{}".format(dcos_space),
+            "spark.mesos.driver.labels=DCOS_SPACE:{}".format(dcos_space),
             "--conf",
             "spark.mesos.role={}".format(role)] + \
         submit_args.split()
