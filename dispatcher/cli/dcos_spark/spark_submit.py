@@ -171,7 +171,8 @@ def submit_job(dispatcher, docker_image, args):
     submit_args = args["--submit-args"]
     verbose = args["--verbose"] if args["--verbose"] is not None else False
     app = spark_app()
-    dcos_space = args["--dcos-space"] if args["--dcos-space"] is not None else app["id"]
+    dcos_space = args["--dcos-space"] if args["--dcos-space"] is not None \
+        else app["id"]
     role = app["env"]["SPARK_DISPATCHER_MESOS_ROLE"]
 
     args = ["--conf",
