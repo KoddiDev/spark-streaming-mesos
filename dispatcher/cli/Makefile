@@ -1,4 +1,5 @@
-all: env test packages
+#all: env test packages
+all: packages
 
 clean:
 	bin/clean.sh

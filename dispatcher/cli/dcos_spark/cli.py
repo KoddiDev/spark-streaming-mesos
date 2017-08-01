@@ -8,6 +8,7 @@ Usage:
     dcos spark run --help
     dcos spark run --submit-args=<spark-args>
                    [--dcos-space=<dcos_space>]
+                   [--keytab-secret-path=<keytab_secret>]
                    [--docker-image=<docker-image>]
                    [--verbose]
     dcos spark status <submissionId> [--verbose]
