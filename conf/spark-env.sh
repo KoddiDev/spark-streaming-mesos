@@ -30,30 +30,23 @@ fi
 # But this fails now due to MESOS-6391, so I'm setting it to /tmp
 MESOS_DIRECTORY=/tmp
 
-echo "-->printing env"
-env
-echo "-->printing user"
-whoami
+echo "spark-env: Printing environment" >&2
+env >&2
+echo "spark-env: User: $(whoami)" >&2
 
-echo "decoding secrets"
 for f in $MESOS_SANDBOX/*.base64 ; do
-    echo "decoding $f"
+    echo "decoding $f" >&2
     secret=$(basename ${f} .base64)
     cat $f | base64 -d > ${secret}
     cat ${secret}
 done
 
 if [[ -n "${KRB5_CONFIG_BASE64}" ]]; then
-    echo "-->copying krb config from $KRB5_CONFIG_BASE64 to /etc/"
+    echo "spark-env: Copying krb config from $KRB5_CONFIG_BASE64 to /etc/" >&2
     echo "${KRB5_CONFIG_BASE64}" | base64 -d > /etc/krb5.conf
-    echo "-->copied"
 else
-    echo "-->No kerberos KDC config found"
+    echo "spark-env: No kerberos KDC config found" >2
 fi
-
-
-
-#[ -f "${MESOS_SANDBOX}/krb5.conf" ] && echo "found krb5.conf, moving to /etc/" && cp "${MESOS_SANDBOX}/krb5.conf" /etc/ && KRB5_CONFIG=/etc/krb5.conf
 
 # Options read when launching programs locally with
 # ./bin/run-example or ./bin/spark-submit
