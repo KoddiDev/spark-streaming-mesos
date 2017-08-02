@@ -37,15 +37,14 @@ echo "spark-env: User: $(whoami)" >&2
 for f in $MESOS_SANDBOX/*.base64 ; do
     echo "decoding $f" >&2
     secret=$(basename ${f} .base64)
-    cat $f | base64 -d > ${secret}
-    cat ${secret}
+    cat ${f} | base64 -d > ${secret}
 done
 
 if [[ -n "${KRB5_CONFIG_BASE64}" ]]; then
     echo "spark-env: Copying krb config from $KRB5_CONFIG_BASE64 to /etc/" >&2
     echo "${KRB5_CONFIG_BASE64}" | base64 -d > /etc/krb5.conf
 else
-    echo "spark-env: No kerberos KDC config found" >2
+    echo "spark-env: No kerberos KDC config found" >&2
 fi
 
 # Options read when launching programs locally with
