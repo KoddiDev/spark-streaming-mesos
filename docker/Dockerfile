@@ -18,7 +18,6 @@
 # docker build -t spark:git-`git rev-parse --short HEAD` .
 
 # Basing from Mesos image so the Mesos native library is present.
-#FROM mesosphere/mesos-modules-private:dcos-ee-mesos-modules-1.8.5-rc2
 FROM ubuntu:14.04
 MAINTAINER Michael Gummelt <mgummelt@mesosphere.io>, Arthur Rand <arand@mesosphere.io>
 
