@@ -14,7 +14,7 @@ mkdir -p "${HADOOP_CONF_DIR}"
 
 cd $MESOS_SANDBOX
 
-MESOS_NATIVE_JAVA_LIBRARY=/usr/lib/libmesos.so
+MESOS_NATIVE_JAVA_LIBRARY=/opt/mesosphere/libmesos-bundle/lib/libmesos.so
 
 # For non-CNI, tell the Spark driver to bind to LIBPROCESS_IP
 #

@@ -158,7 +158,7 @@ def format_kerberos_args(args):
     def check_args():
         if (args[constants.KERBEROS_PRINCIPAL_ARG] is None and
                 args[constants.KEYTAB_SECRET_PATH_ARG] is None):
-            return None  # No Kerberos args
+            return False  # No Kerberos args
         if args[constants.KERBEROS_PRINCIPAL_ARG] is not None:
             if args[constants.KEYTAB_SECRET_PATH_ARG] is None:
                 print("Missing {} argument for keytab "
