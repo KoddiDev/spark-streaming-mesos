@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mesosphere/dcos-commons/cli"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"log"
@@ -15,6 +14,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"github.com/mesosphere/dcos-commons/cli/config"
+	"github.com/mesosphere/dcos-commons/cli/client"
 )
 
 var keyWhitespaceValPattern = regexp.MustCompile("(.+)\\s+(.+)")
@@ -227,7 +228,7 @@ ARGLOOP:
 			i += 1
 		}
 	}
-	if cli.Verbose {
+	if config.Verbose {
 		log.Printf("Translated arguments: '%s'\n", argsEquals)
 	}
 	return argsEquals
@@ -333,10 +334,10 @@ func buildSubmitJson(argsStr string, dockerImage string, submitEnv map[string]st
 
 	// insert/overwrite some default properties:
 	args.properties["spark.submit.deployMode"] = "cluster"
-	if (strings.EqualFold(cli.OptionalCLIConfigValue("core.ssl_verify"), "false")) {
+	if strings.EqualFold(client.OptionalCLIConfigValue("core.ssl_verify"), "false") {
 		args.properties["spark.ssl.noCertVerification"] = "true"
 	}
-	sparkMasterURL := cli.CreateURL("", "")
+	sparkMasterURL := client.CreateServiceURL("", "")
 	if sparkMasterURL.Scheme == "http" {
 		sparkMasterURL.Scheme = "mesos"
 	} else if sparkMasterURL.Scheme == "https" {
@@ -361,17 +362,20 @@ func buildSubmitJson(argsStr string, dockerImage string, submitEnv map[string]st
 	}
 
 	// fetch the spark task definition from Marathon, extract the docker image and HDFS config url:
-	url := cli.CreateURL("replaceme", "")
-	url.Path = fmt.Sprintf("/marathon/v2/apps/%s", cli.ServiceName)
-	responseBytes := cli.GetResponseBytes(cli.CheckHTTPResponse(cli.HTTPQuery(cli.CreateHTTPURLRequest("GET", url, "", ""))))
+	url := client.CreateServiceURL("replaceme", "")
+	url.Path = fmt.Sprintf("/marathon/v2/apps/%s", config.ServiceName)
+
+	responseBytes, err := client.CheckHTTPResponse(
+		client.HTTPQuery(client.CreateHTTPURLRequest("GET", url, "", "", "")))
 
 	responseJson := make(map[string]interface{})
 	err = json.Unmarshal(responseBytes, &responseJson)
 	if err != nil {
 		return "", err
 	}
-	if cli.Verbose {
-		log.Printf("Response from Marathon lookup of task '%s':", cli.ServiceName)
+
+	if config.Verbose {
+		log.Printf("Response from Marathon lookup of task '%s':", config.ServiceName)
 		prettyJson, err := json.MarshalIndent(responseJson, "", " ")
 		if err != nil {
 			log.Fatalf("Failed to prettify json (%s): %s", err, responseJson)
