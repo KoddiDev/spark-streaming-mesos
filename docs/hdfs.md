@@ -79,6 +79,12 @@ Submit the job with the keytab:
     dcos spark run --kerberos-principal=user@REALM --keytab-secret-path=<secret_path> \
     --submit-args=" ... "
 
+### TGT Authentication
+
+Submit the job with the ticket:
+```$bash
+    dcos spark run --kerberos-principal user@REALM --submit-args="--tgt <ticket-file-path> ..."
+```
 
 **Note:** These credentials are security-critical. We highly recommended configuring SSL encryption between the Spark components when accessing Kerberos-secured HDFS clusters. See the Security section for information on how to do this.
 
