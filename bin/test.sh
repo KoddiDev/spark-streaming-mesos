@@ -41,11 +41,23 @@ start_cluster() {
         echo "Using existing cluster: $DCOS_URL"
     else
         echo "Launching new cluster"
-        CCM_JSON=$(CCM_AGENTS=5 ${COMMONS_DIR}/launch_ccm_cluster.py)
-        DCOS_URL=$(echo "${CCM_JSON}" | jq .url)
-        if [ $? -ne 0 -o "$DCOS_URL" = "http://" ]; then
-            exit 1
-        fi
+        random_id=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 10 | head -n 1)
+        cat > config.yaml <<'EOF'
+---
+launch_config_version: 1
+deployment_name: dcos-ci-test-spark-$random_id
+template_url: https://s3.amazonaws.com/downloads.mesosphere.io/dcos-enterprise/testing/master/cloudformation/ee.single-master.cloudformation.json
+provider: aws
+template_parameters:
+    KeyName: default
+    AdminLocation: 0.0.0.0/0
+    PublicSlaveInstanceCount: 0
+    SlaveInstanceCount: 5
+ssh_user: core
+EOF
+        dcos-launch create
+        dcos-launch wait
+        DCOS_URL=https://`dcos-launch describe | jq -r .masters[0].public_ip`
     fi
 }
 
