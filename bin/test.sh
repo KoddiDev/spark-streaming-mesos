@@ -26,6 +26,16 @@ check_env() {
     fi
 }
 
+build_scala_test_jar() {
+    (cd tests/jobs/scala && sbt assembly)
+}
+
+setup_env() {
+    python3 -m venv env
+    . env/bin/activate
+    pip3 install -r ${SPARK_BUILD_DIR}/tests/requirements.txt
+}
+
 start_cluster() {
     if [ -n "${DCOS_URL}" ]; then
         echo "Using existing cluster: $DCOS_URL"
@@ -39,6 +49,12 @@ start_cluster() {
     fi
 }
 
+configure_cli() {
+    dcos config set core.dcos_url $DCOS_URL
+    dcos config set core.ssl_verify false
+    dcos config set core.timeout 5
+}
+
 initialize_service_account() {
     if [ "$SECURITY" = "strict" ]; then
         ${COMMONS_DIR}/setup_permissions.sh root "*"
@@ -46,20 +62,21 @@ initialize_service_account() {
     fi
 }
 
-build_scala_test_jar() {
-    (cd tests/jobs/scala && sbt assembly)
-}
-
 run_tests() {
+    set +e
+    pushd ${SPARK_BUILD_DIR}
     SCALA_TEST_JAR_PATH=${SPARK_BUILD_DIR}/tests/jobs/scala/target/scala-2.11/dcos-spark-scala-tests-assembly-0.1-SNAPSHOT.jar \
-                       CLUSTER_URL=${DCOS_URL} \
-                       STUB_UNIVERSE_URL=${STUB_UNIVERSE_URL} \
-                       ${COMMONS_DIR}/run_tests.py shakedown ${SPARK_BUILD_DIR}/tests ${SPARK_BUILD_DIR}/tests/requirements.txt
+        CLUSTER_URL=${DCOS_URL} \
+        STUB_UNIVERSE_URL=${STUB_UNIVERSE_URL} \
+        py.test -vv -m sanity tests/
+    popd
+    set -e
 }
 
 check_env
-start_cluster
-# TODO: Migrate the following three commands to dcos-commons-tools/run-tests.py
-initialize_service_account
 build_scala_test_jar
+setup_env
+start_cluster
+configure_cli
+initialize_service_account
 run_tests

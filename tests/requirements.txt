@@ -1,2 +1,4 @@
-boto
-dcos-shakedown
+requests==2.10.0
+dcoscli==0.4.16
+dcos==0.4.16
+dcos-shakedown==1.4.4
