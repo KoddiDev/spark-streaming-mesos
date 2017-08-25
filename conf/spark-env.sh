@@ -22,9 +22,13 @@ MESOS_NATIVE_JAVA_LIBRARY=/opt/mesosphere/libmesos-bundle/lib/libmesos.so
 # let Spark perform its default behavior of doing a DNS lookup on the
 # hostname, which should work because the container is set up with a
 # $(hostname) in /etc/hosts.
-if ! getent hosts $(hostname) > /dev/null && [ -n "$LIBPROCESS_IP" ]; then
-    SPARK_LOCAL_IP=${LIBPROCESS_IP}
-fi
+#if ! getent hosts $(hostname) > /dev/null && [ -n "$LIBPROCESS_IP" ]; then
+#    SPARK_LOCAL_IP=${LIBPROCESS_IP}
+#fi
+
+echo "using bootstrap"
+SPARK_LOCAL_IP=$(/mnt/mesos/sandbox/bootstrap --get-task-ip)
+echo "Spark local IP ${SPARK_LOCAL_IP}"
 
 # I first set this to MESOS_SANDBOX, as a Workaround for MESOS-5866
 # But this fails now due to MESOS-6391, so I'm setting it to /tmp
