@@ -48,23 +48,6 @@ configure_env() {
     fi
 }
 
-fetch_commons_tools() {
-    echo "fetching dcos commons tools"
-    if [ -z "${COMMONS_TOOLS_DIR}" ]; then
-        pushd ${DIR}
-        rm -rf dcos-commons-tools/ && curl https://infinity-artifacts.s3.amazonaws.com/dcos-commons-tools.tgz | tar xz
-        popd
-        export COMMONS_TOOLS_DIR=${DIR}/dcos-commons-tools/
-    fi
-}
-
-build_cli() {
-    echo "build_cli: start"
-    pwd
-    ls ${SPARK_BUILD_DIR}/cli/
-    make --directory=cli all
-}
-
 make_docker() {
     echo "make_docker: start"
     (cd "${SPARK_BUILD_DIR}" && DOCKER_IMAGE=${DOCKER_IMAGE} make docker)
@@ -89,7 +72,5 @@ upload_cli_and_stub_universe() {
 source "${SPARK_BUILD_DIR}/bin/jenkins.sh"
 export COMMONS_TOOLS_DIR=${DIR}/dcos-commons-tools/
 configure_env
-#fetch_commons_tools
-build_cli
 make_docker
 upload_cli_and_stub_universe
