@@ -62,12 +62,15 @@ export_daemon_opts
 configure_properties
 ZK="master.mesos:2181"
 
-exec /opt/spark/dist/bin/spark-class \
-    org.apache.spark.deploy.mesos.MesosClusterDispatcher \
-    --port "${DISPATCHER_PORT}" \
-    --webui-port "${DISPATCHER_UI_PORT}" \
+exec /opt/spark/dist/bin/spark-submit \
+    --class "${KODDI_STREAM_CLASS}" \
+    --conf spark.driver.host="${HOST}"
+    --conf spark.driver.port="${DISPATCHER_PORT}"
+    --conf spark.ui.port="${DISPATCHER_UI_PORT}" \
     --master "mesos://zk://${ZK}/mesos" \
-    --zk "${ZK}" \
-    --host "${HOST}" \
+    --conf spark.host="${HOST}" \
     --name "${DCOS_SERVICE_NAME}" \
-    --properties-file "/opt/spark/dist/conf/mesos-cluster-dispatcher.properties"
+    --conf spark.ssl.noCertVerification=true \
+    --conf spark.mesos.executor.docker.image=${SPARK_DOCKER_IMAGE} \
+    --conf spark.executor.home=/opt/spark/dist \
+    /mnt/mesos/sandbox/${KODDI_STREAM_JAR} dev
