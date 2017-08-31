@@ -1,5 +1,5 @@
 This is based off of [mesosphere/spark-build](https://github.com/mesosphere/spark-build).
-See docker/README.md for our usage.
+See [docker/README.md](https://github.com/KoddiDev/spark-streaming-mesos/blob/master/docker/README.md) for our usage.
 
 # Spark DC/OS Package
 
