@@ -1,3 +1,6 @@
+This is based off of [mesosphere/spark-build](https://github.com/mesosphere/spark-build).
+See docker/README.md for our usage.
+
 # Spark DC/OS Package
 
 This repo lets you configure, build, and test a new Spark DC/OS package.
