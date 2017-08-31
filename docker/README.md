@@ -1,4 +1,4 @@
-###Building the streaming docker image
+### Building the streaming docker image
 
 Install texlive using your package manager, e.g. for Linux:
 ```bash
