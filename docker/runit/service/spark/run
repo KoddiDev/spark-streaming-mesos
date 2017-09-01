@@ -26,7 +26,7 @@ function export_daemon_opts() {
 
 function set_log_level() {
     sed "s,<LOG_LEVEL>,${SPARK_LOG_LEVEL}," \
-        /opt/spark/dist/conf/log4j.properties.template >/opt/spark/dist/conf/log4j.properties
+        /opt/spark/dist/conf/log4j.properties.template > /opt/spark/dist/conf/log4j.properties
 }
 
 function add_if_non_empty() {
@@ -68,9 +68,8 @@ exec /opt/spark/dist/bin/spark-submit \
     --conf spark.driver.port="${DISPATCHER_PORT}"
     --conf spark.ui.port="${DISPATCHER_UI_PORT}" \
     --master "mesos://zk://${ZK}/mesos" \
-    --conf spark.host="${HOST}" \
     --name "${DCOS_SERVICE_NAME}" \
     --conf spark.ssl.noCertVerification=true \
     --conf spark.mesos.executor.docker.image=${SPARK_DOCKER_IMAGE} \
     --conf spark.executor.home=/opt/spark/dist \
-    /mnt/mesos/sandbox/${KODDI_STREAM_JAR} dev
+    /mnt/mesos/sandbox/${KODDI_STREAM_JAR} ${KODDI_ENV}
