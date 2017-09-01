@@ -23,7 +23,8 @@
     "SPARK_DOCKER_IMAGE": "koddidev/spark:streaming-2.1.1-hadoop-2.8",
     "KODDI_STREAM_JAR": "koddi-etl-spark-streaming.jar",
     "SPARK_LOG_LEVEL": "INFO",
-    "KODDI_STREAM_CLASS": "com.koddi.etl.spark.streaming.LabelStream"
+    "KODDI_STREAM_CLASS": "com.koddi.etl.spark.streaming.LabelStream",
+    "KODDI_ENV": "dev"
   },
   "healthChecks": [
     {
